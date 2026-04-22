@@ -9,7 +9,7 @@ import { LoginPage } from '@presentation/pages/LoginPage';
 import { NotFoundPage } from '@presentation/pages/NotFoundPage';
 import { RegisterPage } from '@presentation/pages/RegisterPage';
 
-import { PrivateRoute } from './PrivateRoute';
+import { AuthenticatedRoute } from './AuthenticatedRoute';
 import { PublicOnlyRoute } from './PublicOnlyRoute';
 import { ROUTES } from './routes';
 
@@ -23,21 +23,21 @@ export const AppRouter: FC = () => (
       <RegisterPage />
     </PublicOnlyRoute>
 
-    <PrivateRoute exact path={ROUTES.home}>
+    <AuthenticatedRoute exact path={ROUTES.home} title="Inicio">
       <HomePage />
-    </PrivateRoute>
+    </AuthenticatedRoute>
 
-    <PrivateRoute exact path={ROUTES.clients.list}>
+    <AuthenticatedRoute exact path={ROUTES.clients.list} title="Cuentas clientes">
       <ClientsListPage />
-    </PrivateRoute>
+    </AuthenticatedRoute>
 
-    <PrivateRoute exact path={ROUTES.clients.create}>
+    <AuthenticatedRoute exact path={ROUTES.clients.create} title="Nuevo cliente">
       <ClientCreatePage />
-    </PrivateRoute>
+    </AuthenticatedRoute>
 
-    <PrivateRoute exact path={ROUTES.clients.edit}>
+    <AuthenticatedRoute exact path={ROUTES.clients.edit} title="Editar cliente">
       <ClientEditPage />
-    </PrivateRoute>
+    </AuthenticatedRoute>
 
     <Route>
       <NotFoundPage />
