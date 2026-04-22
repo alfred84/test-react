@@ -12,8 +12,7 @@ import type {
 import type { IClientRepository } from '@domain/repositories/IClientRepository';
 import type { IInterestRepository } from '@domain/repositories/IInterestRepository';
 import { useAuth } from '@presentation/providers/auth/AuthContext';
-
-import { InMemoryTokenStorage } from '../testing/inMemoryStorage';
+import { InMemoryTokenStorage } from '@testing/inMemoryStorage';
 
 import { AppProviders } from './AppProviders';
 
