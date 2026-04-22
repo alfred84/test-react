@@ -47,13 +47,10 @@ export const clientMapper = {
   },
 
   filtersToDto(filters: ClientFilters, userId: string): ClientListRequestDto {
-    const dto: Omit<ClientListRequestDto, 'identificacion' | 'nombre'> & {
-      identificacion?: string;
-      nombre?: string;
-    } = { usuarioId: userId };
-    if (filters.identification !== undefined && filters.identification !== '') {
-      dto.identificacion = filters.identification;
-    }
+    const dto: Omit<ClientListRequestDto, 'nombre'> & { nombre?: string } = {
+      identificacion: filters.identification ?? '',
+      usuarioId: userId,
+    };
     if (filters.name !== undefined && filters.name !== '') {
       dto.nombre = filters.name;
     }

@@ -72,9 +72,13 @@ describe('clientMapper.detailToDomain', () => {
 });
 
 describe('clientMapper.filtersToDto', () => {
-  it('always includes usuarioId and omits empty filter values', () => {
-    expect(clientMapper.filtersToDto({}, 'user-1')).toEqual({ usuarioId: 'user-1' });
+  it('always includes identificacion + usuarioId (empty string when the filter is missing)', () => {
+    expect(clientMapper.filtersToDto({}, 'user-1')).toEqual({
+      identificacion: '',
+      usuarioId: 'user-1',
+    });
     expect(clientMapper.filtersToDto({ identification: '', name: '' }, 'user-1')).toEqual({
+      identificacion: '',
       usuarioId: 'user-1',
     });
   });

@@ -50,10 +50,10 @@ describe('ClientRepositoryHttp.list', () => {
     ]);
   });
 
-  it('omits empty filter values from the body', async () => {
+  it('always sends identificacion (empty string when unfiltered) and omits empty nombre', async () => {
     client.mock.onPost('api/Cliente/Listado').reply((config) => {
       const body = JSON.parse(config.data as string) as Record<string, unknown>;
-      expect(body).toEqual({ usuarioId: 'user-1' });
+      expect(body).toEqual({ identificacion: '', usuarioId: 'user-1' });
       return [200, []];
     });
     await expect(repo.list({}, 'user-1')).resolves.toEqual([]);
