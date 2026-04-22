@@ -104,19 +104,19 @@ describe('clientMapper.draftToCreateDto', () => {
     interestId: 'interest-1',
   };
 
-  it('maps to the create dto with telefonoCelular and resenaPersonal (single n)', () => {
+  it('maps to the create dto using celular and resennaPersonal (double n)', () => {
     const dto = clientMapper.draftToCreateDto(draft, 'user-1');
     expect(dto).toEqual({
       nombre: 'Allen',
       apellidos: 'Rivel',
       identificacion: '504440333',
-      telefonoCelular: '88887777',
+      celular: '88887777',
       otroTelefono: '22221111',
       direccion: 'San Jose',
       fNacimiento: '2000-01-15',
       fAfiliacion: '2022-04-27',
       sexo: 'M',
-      resenaPersonal: 'reseña',
+      resennaPersonal: 'reseña',
       imagen: '',
       interesFK: 'interest-1',
       usuarioId: 'user-1',

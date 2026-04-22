@@ -97,13 +97,13 @@ describe('ClientRepositoryHttp.getById', () => {
 });
 
 describe('ClientRepositoryHttp.create', () => {
-  it('posts the create dto using telefonoCelular and resenaPersonal (single n)', async () => {
+  it('posts the create dto using celular and resennaPersonal (double n)', async () => {
     client.mock.onPost('api/Cliente/Crear').reply((config) => {
       const body = JSON.parse(config.data as string) as Record<string, unknown>;
       expect(body).toMatchObject({
         nombre: 'Allen',
-        telefonoCelular: '88887777',
-        resenaPersonal: 'reseña',
+        celular: '88887777',
+        resennaPersonal: 'reseña',
         interesFK: 'interest-1',
         usuarioId: 'user-1',
       });
