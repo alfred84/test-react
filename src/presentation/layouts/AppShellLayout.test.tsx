@@ -32,7 +32,7 @@ const setup = (initialPath = '/'): void => {
         </AppShellLayout>
       </Route>
       <Route exact path="/clients">
-        <AppShellLayout title="Cuentas clientes">
+        <AppShellLayout title="Consulta clientes">
           <div data-testid="clients-content">Clients list</div>
         </AppShellLayout>
       </Route>
@@ -71,7 +71,7 @@ describe('AppShellLayout', () => {
     homeItems.forEach((el) => expect(el).not.toHaveClass('Mui-selected'));
   });
 
-  it('navigates to /clients when the "Cuentas clientes" menu item is clicked', async () => {
+  it('navigates to /clients when the "Consulta clientes" menu item is clicked', async () => {
     setup('/');
     const clientsItems = await screen.findAllByTestId('nav-clients');
     const target = clientsItems[0];

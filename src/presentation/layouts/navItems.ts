@@ -12,7 +12,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { id: 'home', label: 'Inicio', path: ROUTES.home },
   {
     id: 'clients',
-    label: 'Cuentas clientes',
+    label: 'Consulta clientes',
     path: ROUTES.clients.list,
     matchPrefix: '/clients',
   },

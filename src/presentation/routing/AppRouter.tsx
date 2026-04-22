@@ -27,7 +27,7 @@ export const AppRouter: FC = () => (
       <HomePage />
     </AuthenticatedRoute>
 
-    <AuthenticatedRoute exact path={ROUTES.clients.list} title="Cuentas clientes">
+    <AuthenticatedRoute exact path={ROUTES.clients.list} title="Consulta clientes">
       <ClientsListPage />
     </AuthenticatedRoute>
 

@@ -164,7 +164,7 @@ const initialsFrom = (name: string): string => {
  * Authenticated application shell: responsive drawer (permanent on md+,
  * temporary below), top AppBar with page title + session user + logout,
  * and a content slot for the current page. Matches the spec's behaviour:
- * "INICIO" brings the user back home, "CUENTAS CLIENTES" opens the list,
+ * "INICIO" brings the user back home, "CONSULTA CLIENTES" opens the list,
  * the header must show the session username and a logout button on the
  * right edge.
  */

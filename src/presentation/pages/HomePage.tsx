@@ -58,7 +58,7 @@ export const HomePage: FC = () => {
             Bienvenido{username ? `, ${username}` : ''}
           </Typography>
           <Typography variant="body1">
-            Gestioná los clientes de la institución desde un único lugar.
+            Gestiona los clientes de la institución desde un único lugar.
           </Typography>
         </Box>
       </Box>
@@ -69,7 +69,7 @@ export const HomePage: FC = () => {
             <CardContent className={classes.cardContent}>
               <PeopleAltIcon className={classes.cardIcon} />
               <Typography variant="h6" component="h2" gutterBottom>
-                Cuentas clientes
+                Consulta clientes
               </Typography>
               <Typography variant="body2" color="textSecondary">
                 Consultar, crear, editar o eliminar los clientes registrados en el sistema.
