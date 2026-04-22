@@ -118,7 +118,7 @@ export const ClientsListPage: FC = () => {
             Consulta de clientes
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            Buscá, editá y administrá los clientes registrados.
+            Buscar, editar y administrar los clientes registrados.
           </Typography>
         </Box>
         <Box className={classes.toolbar}>

@@ -72,7 +72,7 @@ export const HomePage: FC = () => {
                 Cuentas clientes
               </Typography>
               <Typography variant="body2" color="textSecondary">
-                Consultá, creá, editá o eliminá los clientes registrados en el sistema.
+                Consultar, crear, editar o eliminar los clientes registrados en el sistema.
               </Typography>
             </CardContent>
             <CardActions>
