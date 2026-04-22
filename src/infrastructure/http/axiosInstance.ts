@@ -1,13 +1,18 @@
 import axios, { type AxiosInstance, type CreateAxiosDefaults } from 'axios';
 
-import { ENV } from '@config/env';
-
 import { attachInterceptors, type InterceptorDependencies } from './interceptors';
 
 export interface HttpClientOptions {
   readonly extraConfig?: CreateAxiosDefaults;
 }
 
+/**
+ * Creates a configured axios instance.
+ *
+ * The caller injects `getToken` and `onUnauthorized` (typically via
+ * closures over the current authentication state), so the http client
+ * can be treated as a pure factory with no hidden module-level state.
+ */
 export const createHttpClient = (
   baseURL: string,
   deps: InterceptorDependencies,
@@ -22,12 +27,3 @@ export const createHttpClient = (
   attachInterceptors(instance, deps);
   return instance;
 };
-
-export const defaultDeps: InterceptorDependencies = {
-  getToken: () => null,
-  onUnauthorized: () => {
-    /* wired by the AuthProvider at runtime */
-  },
-};
-
-export const httpClient: AxiosInstance = createHttpClient(ENV.API_BASE_URL, defaultDeps);
