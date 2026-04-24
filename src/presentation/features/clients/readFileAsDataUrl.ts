@@ -27,7 +27,7 @@ export interface ImageValidationResult {
 
 export const validateImageFile = (file: File): ImageValidationResult => {
   if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-    return { ok: false, message: 'Formato no soportado. Usá PNG, JPG o WebP.' };
+    return { ok: false, message: 'Formato no soportado. Usa PNG, JPG o WebP.' };
   }
   if (file.size > MAX_IMAGE_BYTES) {
     return { ok: false, message: 'La imagen debe pesar menos de 2 MB.' };

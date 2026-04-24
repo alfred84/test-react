@@ -68,7 +68,7 @@ export const ClientCreatePage: FC = () => {
           Nuevo cliente
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          Completá la información para registrar un cliente nuevo.
+          Completa la información para registrar un cliente nuevo.
         </Typography>
       </Box>
 

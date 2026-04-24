@@ -131,7 +131,7 @@ export const clientFieldRules = {
     maxLength: { value: 500, message: 'Máximo 500 caracteres.' },
   },
   interestId: {
-    required: 'Seleccioná un interés.',
-    validate: (v: string): string | true => v.trim().length > 0 || 'Seleccioná un interés.',
+    required: 'Selecciona un interés.',
+    validate: (v: string): string | true => v.trim().length > 0 || 'Selecciona un interés.',
   },
 } as const;

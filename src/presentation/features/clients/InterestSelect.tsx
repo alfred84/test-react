@@ -47,7 +47,7 @@ export const InterestSelect: FC<InterestSelectProps> = ({
         inputProps={{ 'data-testid': 'interest-select' }}
       >
         <MenuItem value="">
-          <em>{loading ? 'Cargando…' : 'Seleccioná un interés'}</em>
+          <em>{loading ? 'Cargando…' : 'Selecciona un interés'}</em>
         </MenuItem>
         {items.map((interest) => (
           <MenuItem key={interest.id} value={interest.id}>

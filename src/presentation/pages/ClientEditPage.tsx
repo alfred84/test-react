@@ -130,7 +130,7 @@ export const ClientEditPage: FC = () => {
     const message =
       status === 'not-found'
         ? 'No encontramos el cliente solicitado.'
-        : 'No pudimos cargar el cliente. Intentá nuevamente.';
+        : 'No pudimos cargar el cliente. Intenta nuevamente.';
     return (
       <Box data-testid="client-edit-page">
         <Paper className={classes.paper} elevation={1}>
@@ -160,7 +160,7 @@ export const ClientEditPage: FC = () => {
           Editar cliente
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          Actualizá la información del cliente.
+          Actualiza la información del cliente.
         </Typography>
       </Box>
 

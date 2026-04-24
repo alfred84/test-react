@@ -58,12 +58,12 @@ export const RegisterPage: FC = () => {
   return (
     <AuthLayout
       title="Crear cuenta"
-      subtitle="Completá tus datos para empezar"
+      subtitle="Completa tus datos para empezar"
       footer={
         <Typography variant="body2">
-          ¿Ya tenés una cuenta?{' '}
+          ¿Ya tienes una cuenta?{' '}
           <Link component={RouterLink} to={ROUTES.login} data-testid="go-to-login">
-            Iniciá sesión
+            Inicia sesión
           </Link>
         </Typography>
       }

@@ -67,7 +67,7 @@ export const LoginPage: FC = () => {
       subtitle="Administrador de clientes"
       footer={
         <Typography variant="body2">
-          ¿No tenés una cuenta?{' '}
+          ¿No tienes una cuenta?{' '}
           <Link component={RouterLink} to={ROUTES.register} data-testid="go-to-register">
             Registrate
           </Link>
