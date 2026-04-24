@@ -9,7 +9,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles, type Theme } from '@material-ui/core/styles';
+import { makeStyles, useTheme, type Theme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -25,44 +25,45 @@ import { useAuth } from '@presentation/providers/auth/AuthContext';
 import { NAV_ITEMS, isNavItemActive, type NavItem } from './navItems';
 
 const DRAWER_WIDTH = 260;
+const DRAWER_WIDTH_COLLAPSED = 72;
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     display: 'flex',
+    flexDirection: 'column',
     minHeight: '100vh',
     backgroundColor: theme.palette.background.default,
   },
   appBar: {
-    [theme.breakpoints.up('md')]: {
-      width: `calc(100% - ${DRAWER_WIDTH}px)`,
-      marginLeft: DRAWER_WIDTH,
-    },
     boxShadow: theme.shadows[2],
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
   },
   title: {
     flexGrow: 1,
     fontWeight: 600,
   },
   drawer: {
-    [theme.breakpoints.up('md')]: {
-      width: DRAWER_WIDTH,
-      flexShrink: 0,
-    },
+    flexShrink: 0,
   },
   drawerPaper: {
-    width: DRAWER_WIDTH,
     background: `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
     color: theme.palette.primary.contrastText,
     borderRight: 'none',
+    top: 56,
+    height: 'calc(100% - 56px)',
+    overflowX: 'hidden',
+    [theme.breakpoints.up('sm')]: {
+      top: 64,
+      height: 'calc(100% - 64px)',
+    },
   },
   brand: {
     padding: theme.spacing(3, 2.5),
+  },
+  brandCollapsed: {
+    padding: theme.spacing(2, 1),
   },
   brandTitle: {
     fontWeight: 700,
@@ -77,6 +78,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     padding: theme.spacing(2, 2.5),
     gap: theme.spacing(1.5),
+  },
+  userRowCollapsed: {
+    justifyContent: 'center',
+    padding: theme.spacing(2, 1),
+    gap: 0,
   },
   avatar: {
     backgroundColor: theme.palette.secondary.main,
@@ -102,6 +108,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: theme.shape.borderRadius,
     '&:hover': {
       backgroundColor: 'rgba(255,255,255,0.08)',
+    },
+  },
+  navItemCollapsed: {
+    justifyContent: 'center',
+    margin: theme.spacing(0.5, 0.75),
+    '& .MuiListItemIcon-root': {
+      minWidth: 0,
     },
   },
   navItemActive: {
@@ -132,6 +145,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     minWidth: 0,
   },
+  body: {
+    display: 'flex',
+    flexGrow: 1,
+    minHeight: 0,
+  },
+  toolbarOffset: theme.mixins.toolbar,
   main: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -160,29 +179,40 @@ const initialsFrom = (name: string): string => {
   return (first + second).toUpperCase() || trimmed.charAt(0).toUpperCase();
 };
 
+const navItemClassName = (
+  classes: Record<'navItem' | 'navItemActive' | 'navItemCollapsed', string>,
+  active: boolean,
+  collapsed: boolean,
+): string =>
+  [classes.navItem, active ? classes.navItemActive : '', collapsed ? classes.navItemCollapsed : '']
+    .filter(Boolean)
+    .join(' ');
+
 /**
- * Authenticated application shell: responsive drawer (permanent on md+,
- * temporary below), top AppBar with page title + session user + logout,
- * and a content slot for the current page. Matches the spec's behaviour:
- * "INICIO" brings the user back home, "CONSULTA CLIENTES" opens the list,
- * the header must show the session username and a logout button on the
- * right edge.
+ * Authenticated application shell: permanent sidebar below the top AppBar
+ * (collapsible to icon-only via the toolbar menu button, no modal backdrop),
+ * fixed company title, session user + logout, and a content slot for the page.
  */
-export const AppShellLayout: FC<AppShellLayoutProps> = ({ title, children }) => {
+export const AppShellLayout: FC<AppShellLayoutProps> = ({ children }) => {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
   const classes = useStyles();
+  const theme = useTheme<Theme>();
   const history = useHistory();
   const location = useLocation();
   const auth = useAuth();
   const { logout } = useLogout();
-  const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
   const username = auth.session?.username ?? '';
 
-  const handleToggleDrawer = (): void => setMobileOpen((prev) => !prev);
-  const handleCloseDrawer = (): void => setMobileOpen(false);
+  const drawerWidthPx = sidebarCollapsed ? DRAWER_WIDTH_COLLAPSED : DRAWER_WIDTH;
+  const drawerWidthTransition = theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  });
+
+  const handleToggleSidebar = (): void => setSidebarCollapsed((prev) => !prev);
 
   const handleNavigate = (item: NavItem): void => {
-    handleCloseDrawer();
     if (location.pathname === item.path) return;
     history.push(item.path);
   };
@@ -190,25 +220,44 @@ export const AppShellLayout: FC<AppShellLayoutProps> = ({ title, children }) => 
   const drawer = useMemo(
     () => (
       <>
-        <Box className={classes.brand}>
-          <Typography variant="h6" className={classes.brandTitle}>
-            Clientes
-          </Typography>
-          <Typography variant="caption" className={classes.brandSubtitle}>
-            Panel administrativo
-          </Typography>
+        <Box
+          className={
+            sidebarCollapsed ? `${classes.brand} ${classes.brandCollapsed}` : classes.brand
+          }
+        >
+          {sidebarCollapsed ? (
+            <Typography variant="h6" className={classes.brandTitle} align="center">
+              C
+            </Typography>
+          ) : (
+            <>
+              <Typography variant="h6" className={classes.brandTitle}>
+                Clientes
+              </Typography>
+              <Typography variant="caption" className={classes.brandSubtitle}>
+                Panel administrativo
+              </Typography>
+            </>
+          )}
         </Box>
         <Divider className={classes.divider} />
-        <Box className={classes.userRow} data-testid="drawer-user">
+        <Box
+          className={
+            sidebarCollapsed ? `${classes.userRow} ${classes.userRowCollapsed}` : classes.userRow
+          }
+          data-testid="drawer-user"
+        >
           <Avatar className={classes.avatar}>{initialsFrom(username)}</Avatar>
-          <Box>
-            <Typography variant="body2" className={classes.userName}>
-              {username || 'Usuario'}
-            </Typography>
-            <Typography variant="caption" className={classes.userHint}>
-              Sesión activa
-            </Typography>
-          </Box>
+          {!sidebarCollapsed ? (
+            <Box>
+              <Typography variant="body2" className={classes.userName}>
+                {username || 'Usuario'}
+              </Typography>
+              <Typography variant="caption" className={classes.userHint}>
+                Sesión activa
+              </Typography>
+            </Box>
+          ) : null}
         </Box>
         <Divider className={classes.divider} />
         <List className={classes.navList}>
@@ -220,14 +269,19 @@ export const AppShellLayout: FC<AppShellLayoutProps> = ({ title, children }) => 
                 button
                 key={item.id}
                 onClick={(): void => handleNavigate(item)}
-                className={`${classes.navItem} ${active ? classes.navItemActive : ''}`}
+                className={navItemClassName(classes, active, sidebarCollapsed)}
                 selected={active}
                 data-testid={`nav-${item.id}`}
               >
                 <ListItemIcon className={classes.navIcon}>
                   <Icon />
                 </ListItemIcon>
-                <ListItemText primary={item.label} primaryTypographyProps={{ variant: 'body2' }} />
+                {sidebarCollapsed ? null : (
+                  <ListItemText
+                    primary={item.label}
+                    primaryTypographyProps={{ variant: 'body2' }}
+                  />
+                )}
               </ListItem>
             );
           })}
@@ -235,7 +289,7 @@ export const AppShellLayout: FC<AppShellLayoutProps> = ({ title, children }) => 
       </>
     ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [classes, username, location.pathname],
+    [classes, username, location.pathname, sidebarCollapsed],
   );
 
   return (
@@ -244,16 +298,17 @@ export const AppShellLayout: FC<AppShellLayoutProps> = ({ title, children }) => 
         <Toolbar>
           <IconButton
             color="inherit"
-            aria-label="Abrir menú"
+            aria-label={sidebarCollapsed ? 'Expandir menú' : 'Contraer menú'}
+            aria-expanded={!sidebarCollapsed}
             edge="start"
-            onClick={handleToggleDrawer}
+            onClick={handleToggleSidebar}
             className={classes.menuButton}
             data-testid="shell-menu-button"
           >
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title} data-testid="shell-title">
-            {title}
+            COMPANIA PRUEBA
           </Typography>
           <Box className={classes.toolbarUser}>
             <Hidden smDown implementation="css">
@@ -274,29 +329,37 @@ export const AppShellLayout: FC<AppShellLayoutProps> = ({ title, children }) => 
         </Toolbar>
       </AppBar>
 
-      <nav className={classes.drawer} aria-label="Navegación principal">
-        <Hidden mdUp implementation="css">
+      <Box className={classes.toolbarOffset} />
+
+      <Box className={classes.body}>
+        <Box
+          component="nav"
+          className={classes.drawer}
+          aria-label="Navegación principal"
+          data-testid="shell-sidebar"
+          style={{
+            width: drawerWidthPx,
+            transition: drawerWidthTransition,
+          }}
+        >
           <Drawer
-            variant="temporary"
-            open={mobileOpen}
-            onClose={handleCloseDrawer}
+            variant="permanent"
+            open
             classes={{ paper: classes.drawerPaper }}
-            ModalProps={{ keepMounted: true }}
+            PaperProps={{
+              style: {
+                width: drawerWidthPx,
+                transition: drawerWidthTransition,
+              },
+            }}
           >
             {drawer}
           </Drawer>
-        </Hidden>
-        <Hidden smDown implementation="css">
-          <Drawer variant="permanent" open classes={{ paper: classes.drawerPaper }}>
-            {drawer}
-          </Drawer>
-        </Hidden>
-      </nav>
-
-      <Box className={classes.content}>
-        <Toolbar />
-        <Box component="main" className={classes.main}>
-          {children}
+        </Box>
+        <Box className={classes.content}>
+          <Box component="main" className={classes.main}>
+            {children}
+          </Box>
         </Box>
       </Box>
     </Box>

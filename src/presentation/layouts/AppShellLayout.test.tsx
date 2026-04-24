@@ -53,31 +53,36 @@ const setup = (initialPath = '/'): void => {
 };
 
 describe('AppShellLayout', () => {
-  it('renders the current page title, username and children', async () => {
+  it('renders the fixed company title, username and children', async () => {
     setup('/');
-    expect(await screen.findByTestId('shell-title')).toHaveTextContent('Inicio');
+    expect(await screen.findByTestId('shell-title')).toHaveTextContent('COMPANIA PRUEBA');
     expect(screen.getByTestId('shell-username')).toHaveTextContent('Ana Rivel');
     expect(screen.getByTestId('page-content')).toBeInTheDocument();
   });
 
   it('highlights the active nav item based on the current route', async () => {
     setup('/clients');
-    const clientsItems = await screen.findAllByTestId('nav-clients');
-    const homeItems = screen.getAllByTestId('nav-home');
-    // MUI's <Hidden implementation="css" /> keeps both mobile + desktop copies
-    // in the DOM, so every testid appears twice. The active state must apply
-    // uniformly to all copies.
-    clientsItems.forEach((el) => expect(el).toHaveClass('Mui-selected'));
-    homeItems.forEach((el) => expect(el).not.toHaveClass('Mui-selected'));
+    expect(await screen.findByTestId('nav-clients')).toHaveClass('Mui-selected');
+    expect(screen.getByTestId('nav-home')).not.toHaveClass('Mui-selected');
   });
 
   it('navigates to /clients when the "Consulta clientes" menu item is clicked', async () => {
     setup('/');
-    const clientsItems = await screen.findAllByTestId('nav-clients');
-    const target = clientsItems[0];
-    expect(target).toBeDefined();
-    userEvent.click(target as HTMLElement);
+    userEvent.click(await screen.findByTestId('nav-clients'));
     expect(await screen.findByTestId('clients-content')).toBeInTheDocument();
+  });
+
+  it('toggles the sidebar between full labels and icon-only without a backdrop', async () => {
+    setup('/');
+    expect(screen.getByText('Consulta clientes')).toBeInTheDocument();
+    expect(document.querySelector('.MuiBackdrop-root')).toBeNull();
+
+    userEvent.click(await screen.findByTestId('shell-menu-button'));
+    expect(screen.queryByText('Consulta clientes')).toBeNull();
+    expect(document.querySelector('.MuiBackdrop-root')).toBeNull();
+
+    userEvent.click(screen.getByTestId('shell-menu-button'));
+    expect(await screen.findByText('Consulta clientes')).toBeInTheDocument();
   });
 
   it('logs out and redirects to /login when the toolbar button is clicked', async () => {
