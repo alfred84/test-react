@@ -232,7 +232,11 @@ export const ClientDetailPage: FC = () => {
         <Box className={classes.imageBlock}>
           <Box className={classes.imageFrame}>
             {client.image ? (
-              <img src={client.image} alt={`Foto de ${client.firstName}`} className={classes.image} />
+              <img
+                src={client.image}
+                alt={`Foto de ${client.firstName}`}
+                className={classes.image}
+              />
             ) : (
               <Box className={classes.imageFallback} data-testid="client-detail-image-fallback">
                 <PhotoOutlinedIcon style={{ fontSize: 56 }} />
