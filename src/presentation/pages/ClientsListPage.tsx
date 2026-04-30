@@ -102,7 +102,7 @@ export const ClientsListPage: FC = () => {
     setTargetClient(null);
   }, []);
 
-  const handleConfirmDelete = useCallback(async (): Promise<void> => {
+  const handleConfirmDelete = useCallback((): void => {
     if (!targetClient) return;
     feedback.info('La eliminación de clientes está deshabilitada temporalmente. No se eliminó.');
     setTargetClient(null);
@@ -174,9 +174,7 @@ export const ClientsListPage: FC = () => {
         cancelLabel="Cancelar"
         destructive
         loading={isDeleting}
-        onConfirm={(): void => {
-          void handleConfirmDelete();
-        }}
+        onConfirm={handleConfirmDelete}
         onCancel={closeDialog}
       />
     </Box>
