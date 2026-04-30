@@ -16,7 +16,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import type { FC } from 'react';
 
-import type { ClientSummary } from '@domain/entities/Client';
+import { getClientFullName, type ClientSummary } from '@domain/entities/Client';
 
 export interface ClientsTableProps {
   readonly items: readonly ClientSummary[];
@@ -77,8 +77,7 @@ export const ClientsTable: FC<ClientsTableProps> = ({
           <TableHead>
             <TableRow>
               <TableCell>Identificación</TableCell>
-              <TableCell>Nombre</TableCell>
-              <TableCell>Apellidos</TableCell>
+              <TableCell>Nombre completo</TableCell>
               <TableCell align="right">Acciones</TableCell>
             </TableRow>
           </TableHead>
@@ -89,8 +88,7 @@ export const ClientsTable: FC<ClientsTableProps> = ({
                 return (
                   <TableRow key={client.id} hover data-testid={`client-row-${client.id}`}>
                     <TableCell>{client.identification}</TableCell>
-                    <TableCell>{client.firstName}</TableCell>
-                    <TableCell>{client.lastName}</TableCell>
+                    <TableCell>{getClientFullName(client)}</TableCell>
                     <TableCell align="right">
                       <Box className={classes.actions}>
                         <Tooltip title="Ver detalle">

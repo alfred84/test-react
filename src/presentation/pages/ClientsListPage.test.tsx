@@ -80,6 +80,8 @@ describe('ClientsListPage', () => {
     });
     expect(await screen.findByTestId('client-row-1')).toBeInTheDocument();
     expect(screen.getByTestId('client-row-2')).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: /nombre completo/i })).toBeInTheDocument();
+    expect(screen.getByText('Ana García')).toBeInTheDocument();
   });
 
   it('re-queries the repository with trimmed filters on search', async () => {
