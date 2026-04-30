@@ -6,7 +6,6 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, type Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import type { FC } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -16,18 +15,16 @@ import { ROUTES } from '@presentation/routing/routes';
 
 const useStyles = makeStyles((theme: Theme) => ({
   hero: {
-    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.light} 100%)`,
-    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.background.paper,
+    border: `1px solid ${theme.palette.divider}`,
+    boxShadow: theme.shadows[1],
+    color: theme.palette.text.primary,
     padding: theme.spacing(4),
     borderRadius: theme.shape.borderRadius,
-    display: 'flex',
-    alignItems: 'center',
-    gap: theme.spacing(3),
     marginBottom: theme.spacing(4),
   },
-  heroIcon: {
-    fontSize: 56,
-    opacity: 0.9,
+  heroSubtitle: {
+    color: theme.palette.text.secondary,
   },
   card: {
     height: '100%',
@@ -52,15 +49,12 @@ export const HomePage: FC = () => {
   return (
     <Box data-testid="home-page">
       <Box className={classes.hero}>
-        <AccountCircleIcon className={classes.heroIcon} />
-        <Box>
-          <Typography variant="h4" component="h1">
-            Bienvenido{username ? `, ${username}` : ''}
-          </Typography>
-          <Typography variant="body1">
-            Gestiona los clientes de la institución desde un único lugar.
-          </Typography>
-        </Box>
+        <Typography variant="h4" component="h1">
+          Bienvenido{username ? `, ${username}` : ''}
+        </Typography>
+        <Typography variant="body1" className={classes.heroSubtitle}>
+          Gestiona los clientes de la institución desde un único lugar.
+        </Typography>
       </Box>
 
       <Grid container spacing={3}>
