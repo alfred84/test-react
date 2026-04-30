@@ -5,7 +5,6 @@ import { Route, Switch } from 'react-router-dom';
 
 import type { ClientSummary } from '@domain/entities/Client';
 import type { Session } from '@domain/entities/Session';
-import { HttpError } from '@infrastructure/http/HttpError';
 import { ClientsListPage } from '@presentation/pages/ClientsListPage';
 import { ROUTES } from '@presentation/routing/routes';
 import { InMemoryTokenStorage } from '@testing/inMemoryStorage';
@@ -144,10 +143,9 @@ describe('ClientsListPage', () => {
     expect(await screen.findByTestId('detail-page')).toBeInTheDocument();
   });
 
-  it('asks for confirmation before deleting and removes the row on success', async () => {
+  it('asks for confirmation before deleting but keeps the row and shows an info message', async () => {
     const { repositories } = renderPage((repos) => {
       repos.clients.list.mockResolvedValue(items);
-      repos.clients.delete.mockResolvedValueOnce(undefined);
     });
 
     await screen.findByTestId('client-row-1');
@@ -159,12 +157,12 @@ describe('ClientsListPage', () => {
     userEvent.click(screen.getByTestId('confirm-dialog-confirm'));
 
     await waitFor(() => {
-      expect(repositories.clients.delete).toHaveBeenCalledWith('1');
+      expect(repositories.clients.delete).not.toHaveBeenCalled();
     });
-    await waitFor(() => {
-      expect(screen.queryByTestId('client-row-1')).not.toBeInTheDocument();
-    });
-    expect(await screen.findByText(/eliminado correctamente/i)).toBeInTheDocument();
+    expect(screen.getByTestId('client-row-1')).toBeInTheDocument();
+    expect(
+      await screen.findByText(/la eliminación de clientes está deshabilitada temporalmente/i),
+    ).toBeInTheDocument();
   });
 
   it('closes the confirmation dialog without calling delete when cancelled', async () => {
@@ -183,19 +181,4 @@ describe('ClientsListPage', () => {
     expect(screen.getByTestId('client-row-1')).toBeInTheDocument();
   });
 
-  it('surfaces an error toast when the delete fails and keeps the row', async () => {
-    renderPage((repos) => {
-      repos.clients.list.mockResolvedValue(items);
-      repos.clients.delete.mockRejectedValueOnce(new HttpError('boom', 'UNKNOWN', 500));
-    });
-
-    await screen.findByTestId('client-row-1');
-
-    userEvent.click(screen.getByTestId('client-delete-1'));
-    await screen.findByTestId('confirm-dialog');
-    userEvent.click(screen.getByTestId('confirm-dialog-confirm'));
-
-    expect(await screen.findByText(/problema con la transacción/i)).toBeInTheDocument();
-    expect(screen.getByTestId('client-row-1')).toBeInTheDocument();
-  });
 });

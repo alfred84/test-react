@@ -104,15 +104,9 @@ export const ClientsListPage: FC = () => {
 
   const handleConfirmDelete = useCallback(async (): Promise<void> => {
     if (!targetClient) return;
-    try {
-      await clients.remove(targetClient.id);
-      feedback.success('Cliente eliminado correctamente.');
-      setTargetClient(null);
-    } catch (error) {
-      feedback.error(toDomainErrorMessage(error as DomainError));
-      setTargetClient(null);
-    }
-  }, [clients, feedback, targetClient]);
+    feedback.info('La eliminación de clientes está deshabilitada temporalmente. No se eliminó.');
+    setTargetClient(null);
+  }, [feedback, targetClient]);
 
   const isLoading = clients.status === 'loading';
   const isDeleting = clients.status === 'deleting';
