@@ -12,12 +12,7 @@
 export type GenderDto = 'F' | 'M';
 
 export interface ClientListRequestDto {
-  /**
-   * Always sent. The backend requires the key to be present even when
-   * the caller doesn't filter by identification — in that case an
-   * empty string must be supplied.
-   */
-  readonly identificacion: string;
+  readonly identificacion?: string;
   readonly nombre?: string;
   readonly usuarioId: string;
 }
