@@ -110,7 +110,7 @@ describe('ClientEditPage', () => {
     userEvent.clear(firstName);
     userEvent.type(firstName, 'Anita');
 
-    userEvent.click(screen.getByTestId('form-submit'));
+    userEvent.click(screen.getByTestId('client-edit-save'));
 
     await waitFor(() => {
       expect(repositories.clients.update).toHaveBeenCalledTimes(1);

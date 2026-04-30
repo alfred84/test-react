@@ -1,7 +1,11 @@
 import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles, type Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import SaveIcon from '@material-ui/icons/Save';
 import { useCallback, useEffect, useRef, useState, type FC } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -20,9 +24,24 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing(3),
   },
   header: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(2),
     marginBottom: theme.spacing(3),
+    [theme.breakpoints.up('sm')]: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+  },
+  toolbar: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: theme.spacing(1.5),
   },
 }));
+
+const CREATE_FORM_ID = 'client-create-form';
 
 export const ClientCreatePage: FC = () => {
   const classes = useStyles();
@@ -64,22 +83,45 @@ export const ClientCreatePage: FC = () => {
   return (
     <Box data-testid="client-create-page">
       <Box className={classes.header}>
-        <Typography variant="h5" component="h1">
-          Nuevo cliente
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          Completa la información para registrar un cliente nuevo.
-        </Typography>
+        <Box>
+          <Typography variant="h5" component="h1">
+            Nuevo cliente
+          </Typography>
+          <Typography variant="body2" color="textSecondary">
+            Completa la información para registrar un cliente nuevo.
+          </Typography>
+        </Box>
+        <Box className={classes.toolbar}>
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<ArrowBackIcon />}
+            onClick={goBack}
+            disabled={submitting}
+            data-testid="client-create-back"
+          >
+            Regresar
+          </Button>
+          <Button
+            type="submit"
+            form={CREATE_FORM_ID}
+            variant="contained"
+            color="primary"
+            startIcon={submitting ? <CircularProgress size={18} color="inherit" /> : <SaveIcon />}
+            disabled={submitting}
+            data-testid="client-create-save"
+          >
+            Guardar
+          </Button>
+        </Box>
       </Box>
 
       <Paper className={classes.paper} elevation={1}>
         <ClientForm
-          mode="create"
+          formId={CREATE_FORM_ID}
           interests={interests.items}
           interestsLoading={interests.isLoading}
-          submitting={submitting}
           onSubmit={handleSubmit}
-          onCancel={goBack}
           onImageError={(message): void => feedback.warning(message)}
         />
       </Paper>

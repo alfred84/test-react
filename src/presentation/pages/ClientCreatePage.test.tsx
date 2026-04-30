@@ -71,7 +71,7 @@ describe('ClientCreatePage', () => {
     renderPage();
     expect(await screen.findByRole('heading', { name: /nuevo cliente/i })).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('form-submit'));
+    userEvent.click(screen.getByTestId('client-create-save'));
 
     expect(await screen.findByText(/el nombre es obligatorio/i)).toBeInTheDocument();
     expect(screen.getByText(/los apellidos son obligatorios/i)).toBeInTheDocument();
@@ -90,7 +90,7 @@ describe('ClientCreatePage', () => {
 
     await fillMinimalFields();
 
-    userEvent.click(screen.getByTestId('form-submit'));
+    userEvent.click(screen.getByTestId('client-create-save'));
 
     await waitFor(() => {
       expect(repositories.clients.create).toHaveBeenCalledTimes(1);
@@ -118,7 +118,7 @@ describe('ClientCreatePage', () => {
     });
 
     await fillMinimalFields();
-    userEvent.click(screen.getByTestId('form-submit'));
+    userEvent.click(screen.getByTestId('client-create-save'));
 
     expect(await screen.findByText(/problema con la transacción/i)).toBeInTheDocument();
     expect(screen.queryByTestId('list-page')).not.toBeInTheDocument();
@@ -126,7 +126,7 @@ describe('ClientCreatePage', () => {
 
   it('navigates back on cancel', async () => {
     renderPage();
-    userEvent.click(await screen.findByTestId('form-cancel'));
+    userEvent.click(await screen.findByTestId('client-create-back'));
     expect(await screen.findByTestId('list-page')).toBeInTheDocument();
   });
 });

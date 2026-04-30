@@ -1,6 +1,3 @@
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -9,8 +6,6 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import { makeStyles, type Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import SaveIcon from '@material-ui/icons/Save';
 import { useState, type FC } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
@@ -27,13 +22,11 @@ import { ImageField } from './ImageField';
 import { InterestSelect } from './InterestSelect';
 
 export interface ClientFormProps {
-  readonly mode: 'create' | 'edit';
   readonly initialValues?: ClientFormValues;
+  readonly formId: string;
   readonly interests: readonly Interest[];
   readonly interestsLoading?: boolean;
-  readonly submitting?: boolean;
   readonly onSubmit: (draft: ClientDraft) => void | Promise<void>;
-  readonly onCancel: () => void;
   readonly onImageError?: (message: string) => void;
 }
 
@@ -43,28 +36,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     gap: theme.spacing(2),
   },
-  actions: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: theme.spacing(1.5),
-    justifyContent: 'flex-end',
-    marginTop: theme.spacing(2),
-  },
 }));
 
-const SUBMIT_LABELS = {
-  create: 'Guardar cliente',
-  edit: 'Guardar cambios',
-} as const;
-
 export const ClientForm: FC<ClientFormProps> = ({
-  mode,
   initialValues,
+  formId,
   interests,
   interestsLoading = false,
-  submitting = false,
   onSubmit,
-  onCancel,
   onImageError,
 }) => {
   const classes = useStyles();
@@ -85,6 +64,7 @@ export const ClientForm: FC<ClientFormProps> = ({
 
   return (
     <form
+      id={formId}
       className={classes.form}
       onSubmit={(event): void => {
         void onValid(event);
@@ -348,29 +328,6 @@ export const ClientForm: FC<ClientFormProps> = ({
           />
         </Grid>
       </Grid>
-
-      <Box className={classes.actions}>
-        <Button
-          variant="outlined"
-          color="primary"
-          startIcon={<ArrowBackIcon />}
-          onClick={onCancel}
-          disabled={submitting}
-          data-testid="form-cancel"
-        >
-          Regresar
-        </Button>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          startIcon={submitting ? <CircularProgress size={18} color="inherit" /> : <SaveIcon />}
-          disabled={submitting}
-          data-testid="form-submit"
-        >
-          {SUBMIT_LABELS[mode]}
-        </Button>
-      </Box>
     </form>
   );
 };
