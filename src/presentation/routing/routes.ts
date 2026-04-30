@@ -13,12 +13,14 @@ export const ROUTES = {
   clients: {
     list: '/clients',
     create: '/clients/new',
+    detail: '/clients/:id',
     edit: '/clients/:id/edit',
   },
   notFound: '*',
 } as const;
 
 export const buildPath = {
+  clientDetail: (id: string): string => `/clients/${encodeURIComponent(id)}`,
   clientEdit: (id: string): string => `/clients/${encodeURIComponent(id)}/edit`,
 } as const;
 

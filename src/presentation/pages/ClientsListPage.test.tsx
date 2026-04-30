@@ -29,6 +29,7 @@ interface RenderResult {
 }
 
 const CreateProbe: FC = () => <div data-testid="create-page" />;
+const DetailProbe: FC = () => <div data-testid="detail-page" />;
 const EditProbe: FC = () => <div data-testid="edit-page" />;
 const HomeProbe: FC = () => <div data-testid="home-page" />;
 
@@ -50,6 +51,7 @@ const renderPage = (
     <Switch>
       <Route exact path={ROUTES.home} component={HomeProbe} />
       <Route exact path={ROUTES.clients.create} component={CreateProbe} />
+      <Route exact path={ROUTES.clients.detail} component={DetailProbe} />
       <Route exact path={ROUTES.clients.edit} component={EditProbe} />
       <Route exact path={ROUTES.clients.list} component={ClientsListPage} />
     </Switch>
@@ -129,6 +131,15 @@ describe('ClientsListPage', () => {
 
     userEvent.click(screen.getByTestId('client-edit-1'));
     expect(await screen.findByTestId('edit-page')).toBeInTheDocument();
+  });
+
+  it('navigates to detail page when clicking the view action', async () => {
+    renderPage();
+
+    await screen.findByTestId('client-row-1');
+
+    userEvent.click(screen.getByTestId('client-view-1'));
+    expect(await screen.findByTestId('detail-page')).toBeInTheDocument();
   });
 
   it('asks for confirmation before deleting and removes the row on success', async () => {

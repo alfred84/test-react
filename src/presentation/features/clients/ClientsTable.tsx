@@ -13,6 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import EditIcon from '@material-ui/icons/Edit';
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined';
 import type { FC } from 'react';
 
 import type { ClientSummary } from '@domain/entities/Client';
@@ -22,6 +23,7 @@ export interface ClientsTableProps {
   readonly loading?: boolean;
   readonly deletingId?: string | null;
   readonly emptyMessage?: string;
+  readonly onView: (client: ClientSummary) => void;
   readonly onEdit: (client: ClientSummary) => void;
   readonly onDelete: (client: ClientSummary) => void;
 }
@@ -55,6 +57,7 @@ export const ClientsTable: FC<ClientsTableProps> = ({
   loading = false,
   deletingId = null,
   emptyMessage = 'No se encontraron clientes con los filtros aplicados.',
+  onView,
   onEdit,
   onDelete,
 }) => {
@@ -90,6 +93,17 @@ export const ClientsTable: FC<ClientsTableProps> = ({
                     <TableCell>{client.lastName}</TableCell>
                     <TableCell align="right">
                       <Box className={classes.actions}>
+                        <Tooltip title="Ver detalle">
+                          <span>
+                            <IconButton
+                              aria-label={`Ver detalle de ${client.firstName}`}
+                              onClick={(): void => onView(client)}
+                              data-testid={`client-view-${client.id}`}
+                            >
+                              <VisibilityOutlinedIcon />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
                         <Tooltip title="Editar">
                           <span>
                             <IconButton

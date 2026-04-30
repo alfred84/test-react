@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { ClientCreatePage } from '@presentation/pages/ClientCreatePage';
+import { ClientDetailPage } from '@presentation/pages/ClientDetailPage';
 import { ClientEditPage } from '@presentation/pages/ClientEditPage';
 import { ClientsListPage } from '@presentation/pages/ClientsListPage';
 import { HomePage } from '@presentation/pages/HomePage';
@@ -33,6 +34,10 @@ export const AppRouter: FC = () => (
 
     <AuthenticatedRoute exact path={ROUTES.clients.create} title="Nuevo cliente">
       <ClientCreatePage />
+    </AuthenticatedRoute>
+
+    <AuthenticatedRoute exact path={ROUTES.clients.detail} title="Detalle cliente">
+      <ClientDetailPage />
     </AuthenticatedRoute>
 
     <AuthenticatedRoute exact path={ROUTES.clients.edit} title="Editar cliente">

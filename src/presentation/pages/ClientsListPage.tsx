@@ -87,6 +87,13 @@ export const ClientsListPage: FC = () => {
     [history],
   );
 
+  const handleView = useCallback(
+    (client: ClientSummary): void => {
+      history.push(buildPath.clientDetail(client.id));
+    },
+    [history],
+  );
+
   const handleAskDelete = useCallback((client: ClientSummary): void => {
     setTargetClient(client);
   }, []);
@@ -156,6 +163,7 @@ export const ClientsListPage: FC = () => {
         items={clients.items}
         loading={isLoading}
         deletingId={clients.pendingDeleteId}
+        onView={handleView}
         onEdit={handleEdit}
         onDelete={handleAskDelete}
       />
